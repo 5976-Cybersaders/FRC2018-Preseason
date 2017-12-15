@@ -1,9 +1,16 @@
+
 package org.usfirst.frc.team5976.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//11/18/17
+
+import org.usfirst.frc.team5976.robot.commands.AutonomousDriveStraight;
+import org.usfirst.frc.team5976.robot.commands.DoNothingCommand;
+import org.usfirst.frc.team5976.robot.subsystems.DriveTrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -13,39 +20,62 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	final String defaultAuto = "Default";
-	final String customAuto = "My Auto";
-	String autoSelected;
-	SendableChooser<String> chooser = new SendableChooser<>();
+
+	public static OI oi;
+	public static DriveTrain driveTrain;
+
+	Command autonomousCommand;
+	SendableChooser<Command> chooser = new SendableChooser<>();
 
 	/**
-	 * This function is run when the robot is first started up and should be
-	 * used for any initialization code.
+	 * This function is run when the robot is first started up and should be used
+	 * for any initialization code.
 	 */
 	@Override
 	public void robotInit() {
-		chooser.addDefault("Default Auto", defaultAuto);
-		chooser.addObject("My Auto", customAuto);
-		SmartDashboard.putData("Auto choices", chooser);
+		System.out.println("START ROBOT INIT");
+		SmartDashboardMap.reportAll();
+		
+		oi = new OI();
+		driveTrain = new DriveTrain(oi);
+		// chooser.addObject("My Auto", new MyAutoCommand());
+		SmartDashboard.putData("Auto mode", chooser);
+	}
+
+	/**
+	 * This function is called once each time the robot enters Disabled mode. You
+	 * can use it to reset any subsystem information you want to clear when the
+	 * robot is disabled.
+	 */
+	@Override
+	public void disabledInit() {
+
+	}
+
+	@Override
+	public void disabledPeriodic() {
+		Scheduler.getInstance().run();
 	}
 
 	/**
 	 * This autonomous (along with the chooser code above) shows how to select
-	 * between different autonomous modes using the dashboard. The sendable
-	 * chooser code works with the Java SmartDashboard. If you prefer the
-	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-	 * getString line to get the auto name from the text box below the Gyro
+	 * between different autonomous modes using the dashboard. The sendable chooser
+	 * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
+	 * remove all of the chooser code and uncomment the getString code to get the
+	 * auto name from the text box below the Gyro
 	 *
-	 * You can add additional auto modes by adding additional comparisons to the
-	 * switch structure below with additional strings. If using the
-	 * SendableChooser make sure to add them to the chooser code above as well.
+	 * You can add additional auto modes by adding additional commands to the
+	 * chooser code above (like the commented example) or additional comparisons to
+	 * the switch structure below with additional strings & commands.
 	 */
 	@Override
 	public void autonomousInit() {
-		autoSelected = chooser.getSelected();
-		// autoSelected = SmartDashboard.getString("Auto Selector",
-		// defaultAuto);
-		System.out.println("Auto selected: " + autoSelected);
+		System.out.println("START AUTO INIT");
+		driveTrain.updateDefaultCommandForNonTeleOp();
+		autonomousCommand = new AutonomousDriveStraight(driveTrain);
+
+		if (autonomousCommand != null)
+			autonomousCommand.start();
 	}
 
 	/**
@@ -53,15 +83,18 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		switch (autoSelected) {
-		case customAuto:
-			// Put custom auto code here
-			break;
-		case defaultAuto:
-		default:
-			// Put default auto code here
-			break;
-		}
+		Scheduler.getInstance().run();
+	}
+
+	@Override
+	public void teleopInit() {
+		// This makes sure that the autonomous stops running when
+		// teleop starts running. If you want the autonomous to
+		// continue until interrupted by another command, remove
+		// this line or comment it out.
+		driveTrain.updateDefaultCommandForTeleOp();
+		if (autonomousCommand != null)
+			autonomousCommand.cancel();
 	}
 
 	/**
@@ -69,6 +102,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		Scheduler.getInstance().run();
 	}
 
 	/**
@@ -76,6 +110,6 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		LiveWindow.run();
 	}
 }
-
