@@ -54,6 +54,8 @@ public class EncoderInit extends Command {
 			talon.setP(SmartDashboardMap.kPFL.getDouble());
 			talon.setI(SmartDashboardMap.kIFL.getDouble());
 			talon.setD(SmartDashboardMap.kDFL.getDouble());
+			talon.configPeakOutputVoltage(SmartDashboardMap.PEAK_VOLTAGE.getDouble(),
+					-SmartDashboardMap.PEAK_VOLTAGE.getDouble());
 		}
 		else {
 			talon.setP(SmartDashboardMap.kPRR.getDouble());
@@ -64,14 +66,15 @@ public class EncoderInit extends Command {
 			talon.setP(SmartDashboardMap.kPFR.getDouble());
 			talon.setI(SmartDashboardMap.kIFR.getDouble());
 			talon.setD(SmartDashboardMap.kDFR.getDouble());
+			talon.configPeakOutputVoltage(SmartDashboardMap.PEAK_VOLTAGE.getDouble(),
+					-SmartDashboardMap.PEAK_VOLTAGE.getDouble() - 1);
 		}
 		// Profile 0 For Both
 		talon.setVoltageRampRate(SmartDashboardMap.RAMP_RATE.getDouble());
 		System.out.println("Setting allowable error to " + SmartDashboardMap.ALLOWABLE_ERROR.getDouble());
 		talon.setAllowableClosedLoopErr((int) SmartDashboardMap.ALLOWABLE_ERROR.getDouble());
 		talon.enableControl();
-		talon.configPeakOutputVoltage(SmartDashboardMap.PEAK_VOLTAGE.getDouble(),
-				-SmartDashboardMap.PEAK_VOLTAGE.getDouble());
+		
 		talon.configNominalOutputVoltage(SmartDashboardMap.NOMINAL_VOLTAGE.getDouble(),
 				-SmartDashboardMap.NOMINAL_VOLTAGE.getDouble());
 	}

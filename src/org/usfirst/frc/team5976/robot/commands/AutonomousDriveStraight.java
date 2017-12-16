@@ -17,9 +17,11 @@ public class AutonomousDriveStraight extends CommandGroup {
 	public void commandGroup(DriveTrain driveTrain) {
 		addSequential(new EncoderInit(driveTrain));
 		addSequential(new EncoderDriveStraight(driveTrain, SmartDashboardMap.DRIVE_DISTANCE_1));
-		addSequential(new DoNothingCommand(driveTrain, SmartDashboardMap.TIME));
-		addSequential(new EncoderDriveStraight(driveTrain, SmartDashboardMap.DRIVE_DISTANCE_2));
-		// addSequential(new DoNothingCommand(driveTrain));
+		//addSequential(new DoNothingCommand(driveTrain, SmartDashboardMap.TIME));
+		//addSequential(new EncoderTurnCommand(driveTrain, SmartDashboardMap.ANGLE));
+		//addSequential(new DoNothingCommand(driveTrain, SmartDashboardMap.TIME));
+		//addSequential(new EncoderDriveStraight(driveTrain, SmartDashboardMap.DRIVE_DISTANCE_2));
+		//addSequential(new DoNothingCommand(driveTrain));
 	}
 
 }

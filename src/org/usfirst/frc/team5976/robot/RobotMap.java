@@ -19,4 +19,6 @@ public class RobotMap {
 	public static final int LEFT_SLAVE_PDP = 12;
 	public static final int RIGHT_MASTER_PDP = 3;
 	public static final int RIGHT_SLAVE_PDP = 2;
+	
+	public static final double TURN_DIAMETER = 23.75;
 }

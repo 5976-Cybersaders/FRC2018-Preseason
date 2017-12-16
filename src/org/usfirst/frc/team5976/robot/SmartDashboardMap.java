@@ -26,6 +26,9 @@ public class SmartDashboardMap {
 	public static final SmartValue DRIVE_DISTANCE_1 = new SmartValue("DD 1", 18.8495);
 	public static final SmartValue DRIVE_DISTANCE_2 = new SmartValue("DD 2", -18.8495);
 	public static final SmartValue TIME = new SmartValue("Tiem", 500);
+	
+	// Turn
+	public static final SmartValue ANGLE = new SmartValue("Angle", 90);
 
 	public static void reportAll() {
 		report(kPFL);
